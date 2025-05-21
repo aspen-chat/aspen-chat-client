@@ -1,17 +1,31 @@
 import sys
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt)
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QListView,
-                               QMainWindow, QTextBrowser, QTextEdit,
+                               QTextBrowser, QTextEdit,
                                QVBoxLayout, QWidget)
+from PySide6.QtGui import QColor
+from qframelesswindow import FramelessMainWindow, StandardTitleBar 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
+        title_bar = StandardTitleBar(MainWindow)
+        for btn in [title_bar.minBtn, title_bar.maxBtn]:
+            btn.setNormalColor(Qt.white)
+            btn.setHoverColor(Qt.white)
+            btn.setPressedColor(Qt.white)
+            btn.setPressedBackgroundColor(QColor(137, 222, 124))
+
+        title_bar.closeBtn.setNormalColor(Qt.white)
+        title_bar.closeBtn.setPressedColor(Qt.white)
+
+        MainWindow.setTitleBar(title_bar)
         MainWindow.resize(767, 550)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setContentsMargins(-1, 32, -1, -1)
         self.horizontalLayout_2 = QHBoxLayout(self.centralwidget)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout = QHBoxLayout()
@@ -62,12 +76,14 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Aspen", None))
+        MainWindow.titleBar.raise_()
     # retranslateUi
 
 
 def main():
     app = QApplication(sys.argv)
-    window = QMainWindow()
+    app.setStyle('Fusion')
+    window = FramelessMainWindow()
     win = Ui_MainWindow()
     win.setupUi(window)
     window.show()
